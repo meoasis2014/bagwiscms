@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Site</title>
+    <style>
+        body {font-family: Arial, sans-serif; margin:40px; background:#f4f4f4;}
+        nav a {margin-right:20px; color:#07c; text-decoration:none;}
+        nav a.active {font-weight:bold; color:black; text-decoration:underline;}
+        .container {max-width:800px; margin:auto; background:white; padding:30px; border-radius:8px;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/admin">Admin</a>
+    </nav>
+    <div id="content"></div>
+</div>
+
+<script>
+    const path = location.pathname.replace(/\/$/,'') || '/';
+    const pages = {
+        '/': '<h2>Homepage Content</h2><p>Welcome to our site!</p>',
+        '/about': '<h2>About Page</h2><p>This is the about page</p>',
+        '/contact': '<h2>Contact Page</h2><p>Get in touch with us</p>',
+        '/admin': '<h2>Admin Page Content</h2><p>Welcome to the admin panel</p>'
+    };
+    document.getElementById('content').innerHTML = pages[path] || pages['/'];
+
+    // navigation
+    document.addEventListener('click', e => {
+        if (e.target.tagName === 'A' && e.target.getAttribute('href')?.startsWith('/')) {
+            e.preventDefault();
+            history.pushState(null, '', e.target.href);
+            const p = location.pathname.replace(/\/$/,'') || '/';
+            document.getElementById('content').innerHTML = pages[p] || pages['/'];
+        }
+    });
+    window.addEventListener('popstate', () => {
+        const p = location.pathname.replace(/\/$/,'') || '/';
+        document.getElementById('content').innerHTML = pages[p] || pages['/'];
+    });
+</script>
+</body>
+</html>
